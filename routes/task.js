@@ -3,24 +3,24 @@ const router = express.Router();
 const Task = require("../model/task");
 const { auth } = require("../middleware/requireLogin");
 
-router.get("/fetchAllTask",auth, async (req, res) => {
+router.get("/fetchAllTask", auth, async (req, res) => {
   try {
     const page = req.query.page || 1;
     const pageSize = req.query.pageSize || 5;
     const skip = (page - 1) * pageSize;
     const totalDocument = await Task.countDocuments();
-	  const totalPage = Math.ceil(totalDocument / pageSize);
+    const totalPage = Math.ceil(totalDocument / pageSize);
     const hasNextPage = totalPage > page;
     const hasPreviousPage = page > 1;
     const task = await Task.find().skip(skip).limit(pageSize);
-    res.json({task, totalPage , hasNextPage , hasPreviousPage});
+    res.json({ task, totalPage, hasNextPage, hasPreviousPage });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 });
 
-router.get("/getTaskById/:id",auth, async (req, res) => {
+router.get("/getTaskById/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
     const task = await Task.find({ _id: id });
@@ -31,7 +31,7 @@ router.get("/getTaskById/:id",auth, async (req, res) => {
   }
 });
 
-router.post("/addNewTask",auth, async (req, res) => {
+router.post("/addNewTask", auth, async (req, res) => {
   try {
     const { title, description, duedate } = req.body;
     const newTask = new Task({
@@ -47,10 +47,10 @@ router.post("/addNewTask",auth, async (req, res) => {
   }
 });
 
-router.put("/updateStatusById/:id",auth, async (req, res) => {
+router.put("/updateStatusById/:id", auth, async (req, res) => {
   try {
     const { status } = req.body;
-	const {id} = req.params;
+    const { id } = req.params;
     const updatedTask = await Task.findByIdAndUpdate(
       { _id: id },
       { status: status }
@@ -62,7 +62,7 @@ router.put("/updateStatusById/:id",auth, async (req, res) => {
   }
 });
 
-router.put("/updateTaskById/:id",auth, async (req, res) => {
+router.put("/updateTaskById/:id", auth, async (req, res) => {
   try {
     const { title, description, duedate } = req.body;
     const { id } = req.params;
@@ -95,7 +95,7 @@ router.put("/updateTaskById/:id",auth, async (req, res) => {
   }
 });
 
-router.delete("/deleteTask/:id",auth, async (req, res) => {
+router.delete("/deleteTask/:id", auth, async (req, res) => {
   try {
     taskDeleted = await Task.findByIdAndDelete(req.params.id);
     res.json(taskDeleted);
