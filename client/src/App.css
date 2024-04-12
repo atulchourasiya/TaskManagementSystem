@@ -1,0 +1,12 @@
+@media (max-width: 991.98px) {
+	:root {
+		font-size: 62.5%;
+	}
+}
+.d-none{
+   display: none;
+}
+.wrap{
+  white-space: wrap;
+  word-wrap: break-word;
+}
